@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AVR Desktop</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui;background:#101114;color:#f4f4f5}
+header{height:64px;display:flex;align-items:center;padding:0 22px;border-bottom:1px solid #292b31;font-weight:700}
+aside{position:absolute;top:64px;bottom:0;width:300px;padding:22px;border-right:1px solid #292b31}
+input,button{width:100%;padding:12px;margin-top:10px;border-radius:8px;border:1px solid #34363d;background:#191b20;color:#fff}
+button{cursor:pointer;font-weight:650}.status{margin-top:22px;padding:14px;border-radius:8px;background:#191b20;line-height:1.5}
+small{color:#a1a1aa}.manual{margin-top:14px;color:#fbbf24}
+</style>
+</head>
+<body>
+<header>AVR Desktop <small style="margin-left:10px">V1 Serveur-Privé</small></header>
+<aside>
+<label>URL de vote Serveur-Privé</label>
+<input id="url" placeholder="https://serveur-prive.net/.../vote">
+<button id="open">Ouvrir le vote</button>
+<button id="close">Fermer la page</button>
+<div class="status"><strong>État</strong><div id="state">En attente</div></div>
+<div class="manual">CAPTCHA et vérification e-mail restent manuels.</div>
+</aside>
+<script src="renderer.js"></script>
+</body>
+</html>
