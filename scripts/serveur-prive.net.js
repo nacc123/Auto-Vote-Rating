@@ -40,6 +40,22 @@ async function vote(first) {
                 chrome.runtime.sendMessage({later: ms != null ? Date.now() + ms : true})
                 return true
             }
+            // E-mail verification is an anti-fraud step used by serveur-prive.net.
+            // Keep the tab open and let the user complete the verification manually.
+            // Do not treat it as a terminal vote error.
+            if ((low.includes('e-mail') || low.includes('email') || low.includes('adresse mail'))
+                && (low.includes('vérif') || low.includes('verification') || low.includes('code'))) {
+                if (!window.__spnEmailVerificationAlerted) {
+                    window.__spnEmailVerificationAlerted = true
+                    chrome.runtime.sendMessage({
+                        captcha: true,
+                        message: 'serveur-prive.net: vérification e-mail requise. Saisissez manuellement le code reçu, puis la tentative reprendra.'
+                    })
+                }
+                voteClicked = false
+                return false
+            }
+
             // Invalid/expired captcha: wait for a fresh solve then retry
             if (low.includes('captcha')) {
                 voteClicked = false
@@ -58,6 +74,22 @@ async function vote(first) {
             }
             chrome.runtime.sendMessage(request)
             return true
+        }
+
+        // The verification form can also be rendered as a separate step without an AJAX error.
+        // Detect common verification wording so the tab stays available to the user.
+        const pageText = document.body?.innerText?.toLowerCase() || ''
+        if (!voteClicked
+            && (pageText.includes('vérification de vote') || pageText.includes('verification de vote'))
+            && (pageText.includes('code') || pageText.includes('e-mail') || pageText.includes('email'))) {
+            if (!window.__spnEmailVerificationAlerted) {
+                window.__spnEmailVerificationAlerted = true
+                chrome.runtime.sendMessage({
+                    captcha: true,
+                    message: 'serveur-prive.net: vérification e-mail requise. Saisissez manuellement le code reçu, puis la tentative reprendra.'
+                })
+            }
+            return false
         }
 
         // 2. Successful vote (only after our own click)
