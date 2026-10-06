@@ -1,0 +1,21 @@
+{
+  "name": "avr-desktop",
+  "version": "0.1.0",
+  "description": "AVR Desktop - Serveur Prive companion",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win"
+  },
+  "devDependencies": {
+    "electron": "^38.0.0",
+    "electron-builder": "^26.0.0"
+  },
+  "build": {
+    "appId": "fr.avr.desktop",
+    "productName": "AVR Desktop",
+    "files": ["main.js", "preload.js", "renderer.js", "index.html"],
+    "win": {"target": "nsis"},
+    "nsis": {"oneClick": false, "allowToChangeInstallationDirectory": true}
+  }
+}
